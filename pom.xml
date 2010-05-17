@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.softwaremill</groupId>
+    <artifactId>cdiext</artifactId>
+    <packaging>jar</packaging>
+    <name>CDI and Weld extensions</name>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <!--
+           Explicitly declaring the source encoding eliminates the following original:
+           [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+        -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hibernate.version>3.5.1-Final</hibernate.version>
+        <arquillian.version>1.0.0.Alpha1</arquillian.version>
+    </properties>
+
+    <repositories>
+        <!-- Several key Java EE APIs and RIs are missing from the Maven Central Repository -->
+        <!-- The goal is to eventually eliminate the reliance on the JBoss repository -->
+        <repository>
+            <id>java.net</id>
+            <name>Java.Net Maven2 Repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>scala.tools.releases</id>
+            <name>Scala Tools Releases</name>
+            <url>http://scala-tools.org/repo-releases/</url>
+        </repository>
+        <repository>
+            <id>oss.sonatype.org/jboss-snapshots</id>
+            <name>Nexus JBoss Snapshots Repository</name>
+            <url>http://oss.sonatype.org/content/repositories/jboss-snapshots</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss-public-repository-normalGroup</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-normalGroup</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Import scope will provide versions for dependencies below. -->
+            <dependency>
+                <groupId>org.jboss.weld</groupId>
+                <artifactId>weld-extensions-bom</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- CDI (JSR-299) -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Bean Validation (JSR-303) -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Bean Validation Implementation -->
+        <!-- Provides portable constraints such as @NotEmpty, @Email and @Url -->
+        <!-- Hibernate Validator is the only JSR-303 implementation at the moment, so we can assume it's provided -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.0.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSF -->
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <!-- TODO: remove after weld-api-bom specifies the version correctly -->
+            <version>2.0.2-FCS</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JPA -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.0-CR-1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- TODO: update to 6.0 (https://jira.jboss.org/jira/browse/JBEE-15) -->
+        <!-- JEE -->
+        <dependency>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-javaee</artifactId>
+            <version>5.2.0.Beta1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-servlet-api</artifactId>
+            <version>2.5.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- EL-impl: for creating EL contexts outside of faces requests -->
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-ri</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Optional, but highly recommended. -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+            <classifier>jdk15</classifier>
+        </dependency>
+
+        <!-- FindBugs -->
+        <!-- TODO: enable -->
+        <dependency>
+            <groupId>net.sourceforge.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        
+        <!-- Weld extensions -->
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-extensions</artifactId>
+        </dependency>
+
+        <!-- Debug -->
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core</artifactId>
+            <version>1.0.1-Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Arquillian -->
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-testng</artifactId>
+            <version>${arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-weld-embedded</artifactId>
+            <version>${arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>${artifactId}</finalName>
+        <plugins>
+            <!-- Compiler plugin enforces Java 1.6 compatibility -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>
