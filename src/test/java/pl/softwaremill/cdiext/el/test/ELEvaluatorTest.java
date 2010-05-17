@@ -10,6 +10,8 @@ import pl.softwaremill.cdiext.el.ELEvaluator;
 import pl.softwaremill.cdiext.test.util.ArquillianUtil;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Adam Warski (adam at warski dot org)
@@ -36,13 +38,10 @@ public class ELEvaluatorTest extends Arquillian {
 
     @Test
     public void testParameter() {
-        try {
-            elEvaluator.setParameter("testParam1", 123);
-            elEvaluator.setParameter("testParam2", 2);
-            Assert.assertEquals(elEvaluator.evaluate("#{testParam1 + 10 + testParam2}", Integer.class), (Integer) 135);
-        } finally {
-            elEvaluator.clearParameter("testParam1");
-            elEvaluator.clearParameter("testParam2");
-        }
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("testParam1", 123);
+        params.put("testParam2", 2);
+
+        Assert.assertEquals(elEvaluator.evaluate("#{testParam1 + 10 + testParam2}", Integer.class, params), (Integer) 135);
     }
 }

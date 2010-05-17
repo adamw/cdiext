@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Adam Warski (adam at warski dot org)
  * @author http://community.jboss.org/thread/148045?tstart=0
  */
-public class TemporaryContextELEvaluator implements ELEvaluator {
+public class TemporaryContextELEvaluator extends AbstractELEvaluator {
     private final ExpressionFactory expressionFactory;
     private final ELContext elContext;
     private final ConstantResolver constantResolver;
@@ -24,17 +24,14 @@ public class TemporaryContextELEvaluator implements ELEvaluator {
         elContext = createELContext(beanManager);
     }
 
-    @Override
     public <T> T evaluate(String expression, Class<T> expectedResultType) {
         return ELEvaluatorUtil.evaluate(elContext, expressionFactory, expression, expectedResultType);
     }
 
-    @Override
     public void setParameter(String name, Object value) {
         constantResolver.addConstant(name, value);
     }
 
-    @Override
     public void clearParameter(String name) {
         constantResolver.removeConstant(name);
     }

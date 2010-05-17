@@ -1,6 +1,7 @@
 package pl.softwaremill.cdiext.security;
 
 import pl.softwaremill.cdiext.el.ELEvaluator;
+import pl.softwaremill.cdiext.util.CollectionUtil;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -53,8 +54,7 @@ public class SecurityInterceptor {
         Map<String, Object> secureVars = computeParameterValues(ctx);
 
         for (Secure constraint : constraints) {
-            Boolean expressionValue = evaluateExpressionWithParameters(elEvaluator, constraint.value(), Boolean.class,
-                    secureVars);
+            Boolean expressionValue = elEvaluator.evaluate(constraint.value(), Boolean.class, secureVars);
 
             if (expressionValue == null || !expressionValue) {
                 // TODO: message
@@ -89,30 +89,6 @@ public class SecurityInterceptor {
     }
 
     public Object evaluateSecureVarExp(Object base, SecureVar secureVar) {
-        elEvaluator.setParameter("p", base);
-        try {
-            return elEvaluator.evaluate(secureVar.exp(), Object.class);
-        } finally {
-            elEvaluator.clearParameter("p");
-        }
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public <T> T evaluateExpressionWithParameters(ELEvaluator elEvaluator,
-                                                  String expression, Class<T> expectedResultType,
-                                                  Map<String, Object> parameters) {
-        // Populating the request map so that parameters are available
-        for (Map.Entry<String, Object> parameter : parameters.entrySet()) {
-            elEvaluator.setParameter(parameter.getKey(), parameter.getValue());
-        }
-
-        try {
-            return elEvaluator.evaluate(expression, expectedResultType);
-        } finally {
-            // Removing the parameters
-            for (String parameterName : parameters.keySet()) {
-                elEvaluator.clearParameter(parameterName);
-            }
-        }
+        return elEvaluator.evaluate(secureVar.exp(), Object.class, CollectionUtil.singleKeyMap("p", base));
     }
 }

@@ -1,6 +1,7 @@
 package pl.softwaremill.cdiext.security;
 
 import pl.softwaremill.cdiext.el.ELEvaluator;
+import pl.softwaremill.cdiext.util.CollectionUtil;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -35,11 +36,6 @@ public class SecurityResultInterceptor {
     }
 
     public Boolean evaluateSecureResultExp(Object base, SecureResult secureResult) {
-        elEvaluator.setParameter("result", base);
-        try {
-            return elEvaluator.evaluate(secureResult.value(), Boolean.class);
-        } finally {
-            elEvaluator.clearParameter("result");
-        }
+        return elEvaluator.evaluate(secureResult.value(), Boolean.class, CollectionUtil.singleKeyMap("result", base));
     }
 }
