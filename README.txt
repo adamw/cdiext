@@ -1,6 +1,8 @@
 CDI & Weld Extensions
 =====================
 
+Build the .jar and bundle it with your app.
+
 1. Stackable security interceptors
 
 Defines the @Secure annotation, which takes an EL expression. The expression must evaluate to true, otherwise
