@@ -9,18 +9,11 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <!--
-           Explicitly declaring the source encoding eliminates the following original:
-           [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-        -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hibernate.version>3.5.1-Final</hibernate.version>
         <arquillian.version>1.0.0.Alpha1</arquillian.version>
     </properties>
 
     <repositories>
-        <!-- Several key Java EE APIs and RIs are missing from the Maven Central Repository -->
-        <!-- The goal is to eventually eliminate the reliance on the JBoss repository -->
         <repository>
             <id>java.net</id>
             <name>Java.Net Maven2 Repository</name>
@@ -91,37 +84,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Bean Validation (JSR-303) -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Bean Validation Implementation -->
-        <!-- Provides portable constraints such as @NotEmpty, @Email and @Url -->
-        <!-- Hibernate Validator is the only JSR-303 implementation at the moment, so we can assume it's provided -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>4.0.0.GA</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- JSF -->
         <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>jsf-api</artifactId>
-            <!-- TODO: remove after weld-api-bom specifies the version correctly -->
-            <version>2.0.2-FCS</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- JPA -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.0-CR-1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -131,12 +97,6 @@
             <groupId>org.jboss.javaee</groupId>
             <artifactId>jboss-javaee</artifactId>
             <version>5.2.0.Beta1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.javaee</groupId>
-            <artifactId>jboss-servlet-api</artifactId>
-            <version>2.5.0.GA</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -161,7 +121,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Optional, but highly recommended. -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -187,7 +147,6 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-core</artifactId>
-            <version>1.0.1-Final</version>
             <scope>provided</scope>
         </dependency>
 
