@@ -77,9 +77,21 @@ By Gaving King, see http://in.relation.to/13053.lace.
 
 5. Current locale holder
 
+To enable, add to faces-config.xml:
+
+<application>
+    <view-handler>pl.softwaremill.cdiext.i18n.CurrentLocaleViewHandler</view-handler>
+</application>
+
 6. Writeable & read only entity managers
 
 7. Transaction JSF phase listeners
+
+To enable, add to faces-config.xml:
+
+<lifecycle>
+    <phase-listener>pl.softwaremill.cdiext.transaction.TransactionPhaseListener</phase-listener>
+</lifecycle>
 
 8. Fields equal validator
 
@@ -98,6 +110,15 @@ A component for enqueing faces messages, which will survive redirects. Use:
 @Inject
 private FacesMessages facesMessages;
 
+To enable, add to faces-config.xml:
+
+<application>
+    <system-event-listener>
+        <system-event-class>javax.faces.event.PreRenderViewEvent</system-event-class>
+        <system-event-listener-class>pl.softwaremill.cdiext.messages.FacesMessagesListener</system-event-listener-class>
+    </system-event-listener>
+</application>
+
 10. Navigation
 
 Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
@@ -115,3 +136,9 @@ You can then use the component either to return results of action methods or to 
 11. Restricting pages to logged in users only
 
 There must be a bean implementing the LoginBean interface; the bean controls if there's a logged in user.
+
+To enable, add to faces-config.xml:
+
+<lifecycle>
+    <phase-listener>pl.softwaremill.util.SecurityPhaseListener</phase-listener>
+</lifecycle>
