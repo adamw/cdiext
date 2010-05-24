@@ -1,5 +1,5 @@
-CDI & Weld Extensions
-=====================
+CDI, Weld and JSF Extensions
+============================
 
 Build the .jar and bundle it with your app.
 
@@ -78,3 +78,22 @@ By Gaving King, see http://in.relation.to/13053.lace.
 5. Current locale holder
 
 6. Writeable & read only entity managers
+
+7. Transaction JSF phase listeners
+
+8. Fields equal validator
+
+<h:inputSecret id="password" value="#{password}" />
+
+<h:inputSecret id="confirmPassword" value="#{confirmPassword}">
+    <f:validator validatorId="fieldsEqual" />
+    <f:attribute name="fieldsEqualCompareTo" value="password" />
+    <f:attribute name="fieldsEqualMessageKey" value="passwords don't match" />
+</h:inputSecret>
+
+9. Faces messages
+
+A component for enqueing faces messages, which will survive redirects. Use:
+
+@Inject
+private FacesMessages facesMessages;

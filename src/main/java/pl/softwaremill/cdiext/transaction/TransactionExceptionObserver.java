@@ -1,0 +1,27 @@
+package pl.softwaremill.cdiext.transaction;
+
+import javax.annotation.Resource;
+import javax.enterprise.event.Observes;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+/**
+ * @author Adam Warski (adam at warski dot org)
+ */
+public class TransactionExceptionObserver {
+    @Resource
+    private UserTransaction utx;
+
+    /**
+     * When an exception is thrown, the transaction is rolled back. 
+     * @param e The event.
+     */
+    public void onExceptionQueued(@Observes ExceptionQueuedEvent e) {
+        try {
+            utx.rollback();
+        } catch (SystemException e1) {
+            throw new RuntimeException(e1);
+        }
+    }
+}
