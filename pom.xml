@@ -11,6 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <arquillian.version>1.0.0.Alpha1</arquillian.version>
+        <hibernate.version>3.5.1-Final</hibernate.version>
     </properties>
 
     <repositories>
@@ -88,6 +89,8 @@
         <dependency>
             <groupId>javax.faces</groupId>
             <artifactId>jsf-api</artifactId>
+            <!-- TODO: remove after weld-api-bom specifies the version correctly -->
+            <version>2.0.2-FCS</version>
             <scope>provided</scope>
         </dependency>
 
@@ -97,6 +100,12 @@
             <groupId>org.jboss.javaee</groupId>
             <artifactId>jboss-javaee</artifactId>
             <version>5.2.0.Beta1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-servlet-api</artifactId>
+            <version>2.5.0.GA</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -111,6 +120,26 @@
             <groupId>javax.el</groupId>
             <artifactId>el-ri</artifactId>
             <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
             <scope>provided</scope>
         </dependency>
 

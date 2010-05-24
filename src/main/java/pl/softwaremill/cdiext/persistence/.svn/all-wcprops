@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/!svn/ver/1701/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence
+END
+EntityManagerProducer.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/!svn/ver/1662/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence/EntityManagerProducer.java
+END
+Writeable.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/!svn/ver/1662/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence/Writeable.java
+END
+EntityManagerTxEnlistDecorator.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/!svn/ver/1662/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence/EntityManagerTxEnlistDecorator.java
+END
+EntityWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/!svn/ver/1701/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence/EntityWriter.java
+END
+ReadOnly.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/!svn/ver/1662/private/adamw/prog/trackeree/src/main/java/pl/softwaremill/util/persistence/ReadOnly.java
+END

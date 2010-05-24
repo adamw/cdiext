@@ -1,2 +1,3 @@
 pl.softwaremill.cdiext.security.SecurityExtension
+pl.softwaremill.cdiext.config.ConfigExtension
 

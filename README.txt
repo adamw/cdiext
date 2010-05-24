@@ -65,3 +65,16 @@ void someMethod() {
 The evaluator is a request-scoped bean. It can be injected and used both when a web request is active, and when
 not (e.g. during an MDB invocation). The third parameter is optional and is a map of parameters, which will be put
 in the EL context for the duration of the evaluation.
+
+3. Static BeanInject
+
+Use BeanInject.lookup to obtain the current instance of a bean of the given class. There may be only one bean with
+the given class for this to work.
+
+4. Config extension
+
+By Gaving King, see http://in.relation.to/13053.lace.
+
+5. Current locale holder
+
+6. Writeable & read only entity managers
