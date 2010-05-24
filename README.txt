@@ -97,3 +97,21 @@ A component for enqueing faces messages, which will survive redirects. Use:
 
 @Inject
 private FacesMessages facesMessages;
+
+10. Navigation
+
+Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
+
+private final Page page1 = new PageBuilder("/page1.xhtml").setRequiresLogin(true).b();
+private final Page login = new PageBuilder("/login.xhtml").b();
+...
+
+And define a getter for each page.
+
+You can then use the component either to return results of action methods or to create links:
+
+<h:link outcome="#{nav.page1.s}">Page 1</h:link>
+
+11. Restricting pages to logged in users only
+
+There must be a bean implementing the LoginBean interface; the bean controls if there's a logged in user.

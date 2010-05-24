@@ -7,6 +7,7 @@
       http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
     <lifecycle>
         <phase-listener>pl.softwaremill.cdiext.transaction.TransactionPhaseListener</phase-listener>
+        <phase-listener>pl.softwaremill.util.SecurityPhaseListener</phase-listener>
     </lifecycle>
 
     <application>
