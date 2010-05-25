@@ -6,14 +6,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 import java.util.List;
 
 /**
  * @author Adam Warski (adam at warski dot org)
  */
-@FacesValidator("fieldsEqual")
 public class FieldsEqualValidator implements javax.faces.validator.Validator {
     public void validate(FacesContext context, UIComponent cmp, Object value)
             throws ValidatorException {

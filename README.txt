@@ -4,6 +4,7 @@ CDI, Weld and JSF Extensions
 Build the .jar and bundle it with your app.
 
 1. Stackable security interceptors
+----------------------------------
 
 Defines the @Secure annotation, which takes an EL expression. The expression must evaluate to true, otherwise
 access won't be granted. It can also be used as a meta-annotation together with @SecureBinding. In case several
@@ -50,6 +51,7 @@ Blog links:
 * http://www.warski.org/blog/?p=211
 
 2. Injectable EL Evaluator
+--------------------------
 
 Usage:
 
@@ -67,15 +69,23 @@ not (e.g. during an MDB invocation). The third parameter is optional and is a ma
 in the EL context for the duration of the evaluation.
 
 3. Static BeanInject
+--------------------
 
 Use BeanInject.lookup to obtain the current instance of a bean of the given class. There may be only one bean with
 the given class for this to work.
 
 4. Config extension
+-------------------
+
+You can configure a bean using a properties file. The properties file must be in the same package as the bean.
 
 By Gaving King, see http://in.relation.to/13053.lace.
 
 5. Current locale holder
+------------------------
+
+Stores the selected locale in a client cookie, for a month. To change the locale, use the
+CurrentLocale.setCurrentLocale method.
 
 To enable, add to faces-config.xml:
 
@@ -84,8 +94,28 @@ To enable, add to faces-config.xml:
 </application>
 
 6. Writeable & read only entity managers
+----------------------------------------
+
+You can inject a read-only and writeable entity managers, to control when entities are written. To read entities, use:
+
+@Inject
+private @ReadOnly EntityManager readOnlyEntityManager;
+
+To write entities, use the EntityWriter bean:
+
+@Inject
+private EntityWriter entityWriter;
+
+Any entities passed there must implement the Identifiable interface. The passed entity will be written, and properly
+removed and reloaded in the read only EM.
+
+For this to work properly, all relations in all writeable entities must have DETACH cascade enabled.
 
 7. Transaction JSF phase listeners
+----------------------------------
+
+The phase listener starts two transactions: one for postbacks, which lasts until after the invoke application phase,
+and a second one for rendering the response.
 
 To enable, add to faces-config.xml:
 
@@ -94,6 +124,9 @@ To enable, add to faces-config.xml:
 </lifecycle>
 
 8. Fields equal validator
+-------------------------
+
+A validator for checking that the content of two fields is equal.
 
 <h:inputSecret id="password" value="#{password}" />
 
@@ -103,7 +136,15 @@ To enable, add to faces-config.xml:
     <f:attribute name="fieldsEqualMessageKey" value="passwords don't match" />
 </h:inputSecret>
 
+To enable, add to faces-config.xml:
+
+<validator>
+    <validator-id>fieldsEqual</validator-id>
+    <validator-class>pl.softwaremill.cdiext.validator.FieldsEqualValidator</validator-class>
+</validator>
+
 9. Faces messages
+-----------------
 
 A component for enqueing faces messages, which will survive redirects. Use:
 
@@ -120,6 +161,7 @@ To enable, add to faces-config.xml:
 </application>
 
 10. Navigation
+--------------
 
 Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
 
@@ -133,9 +175,19 @@ You can then use the component either to return results of action methods or to 
 
 <h:link outcome="#{nav.page1.s}">Page 1</h:link>
 
+public String someAction() {
+    ...
+    return nav.getPage1().includeViewParams().redirect().s();
+}
+
+You must define a login page. This works in conjuction with restricting pages to logged in users only.
+
 11. Restricting pages to logged in users only
+---------------------------------------------
 
 There must be a bean implementing the LoginBean interface; the bean controls if there's a logged in user.
+Any pages, defined in the navigation (see above) by the page builder to require login, will be redirected to the
+login page if a user isn't logged in.
 
 To enable, add to faces-config.xml:
 

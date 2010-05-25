@@ -3,6 +3,7 @@ package pl.softwaremill.cdiext.transaction;
 import javax.annotation.Resource;
 import javax.enterprise.event.Observes;
 import javax.faces.event.ExceptionQueuedEvent;
+import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -19,7 +20,9 @@ public class TransactionExceptionObserver {
      */
     public void onExceptionQueued(@Observes ExceptionQueuedEvent e) {
         try {
-            utx.rollback();
+            if (utx.getStatus() == Status.STATUS_ACTIVE) {
+                utx.rollback();
+            }
         } catch (SystemException e1) {
             throw new RuntimeException(e1);
         }
