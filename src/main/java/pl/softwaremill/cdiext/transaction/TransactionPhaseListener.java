@@ -84,8 +84,15 @@ public class TransactionPhaseListener implements PhaseListener {
         try {
             UserTransaction utx = getUserTransaction();
 
-            if (utx.getStatus() == Status.STATUS_ACTIVE && facesContext.getAttributes().containsKey(STARTED_TX_KEY)) {
-                utx.commit();
+            if (facesContext.getAttributes().containsKey(STARTED_TX_KEY)) {
+                if (utx.getStatus() == Status.STATUS_ACTIVE) {
+                    utx.commit();
+                } else {
+                    if (utx.getStatus() != Status.STATUS_ROLLEDBACK) {
+                        utx.rollback();
+                    }
+                }
+                
                 facesContext.getAttributes().remove(STARTED_TX_KEY);
             }
         } catch (RuntimeException e) {
