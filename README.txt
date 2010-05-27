@@ -68,20 +68,53 @@ The evaluator is a request-scoped bean. It can be injected and used both when a 
 not (e.g. during an MDB invocation). The third parameter is optional and is a map of parameters, which will be put
 in the EL context for the duration of the evaluation.
 
-3. Static BeanInject
+3. Object services
+------------------
+
+Object services can be used to "extend" a class hierarchy with methods. If there is a bean implementing some interface
+for each class in a hierarchy, using the extension it is possible to obtain a bean corresponding to a given object; the
+resolution is performed run-time.
+
+For example, if we have the type hierarchy:
+abstract class A
+class B extends A
+class C extends A
+
+And corresponding services:
+interface TestService<T extends A> extends OS<T> { void someMethod(); }
+class TestServiceB implements TestService<B> { void someMethod() { ... } }
+class TestServiceC implements TestService<C> { void someMethod() { ... } }
+
+The extension registeres object service provider beans:
+
+@Inject
+OSP<A, TestService<A>> testService;
+
+void test() {
+    // Will invoke someMethod in TestServiceB
+    testService.f(new B()).someMethod()
+
+    // Will invoke someMethod in TestServiceC
+    testService.f(new C()).someMethod()
+}
+
+The serviced object (B or C in the above example) is set on the services using the setServiced() method, when the
+service is obtained. On each invocation of f(), a new service instance is created.
+
+4. Static BeanInject
 --------------------
 
 Use BeanInject.lookup to obtain the current instance of a bean of the given class. There may be only one bean with
 the given class for this to work.
 
-4. Config extension
+5. Config extension
 -------------------
 
 You can configure a bean using a properties file. The properties file must be in the same package as the bean.
 
 By Gaving King, see http://in.relation.to/13053.lace.
 
-5. Current locale holder
+6. Current locale holder
 ------------------------
 
 Stores the selected locale in a client cookie, for a month. To change the locale, use the
@@ -93,7 +126,7 @@ To enable, add to faces-config.xml:
     <view-handler>pl.softwaremill.cdiext.i18n.CurrentLocaleViewHandler</view-handler>
 </application>
 
-6. Writeable & read only entity managers
+7. Writeable & read only entity managers
 ----------------------------------------
 
 You can inject a read-only and writeable entity managers, to control when entities are written. To read entities, use:
@@ -111,7 +144,7 @@ removed and reloaded in the read only EM.
 
 For this to work properly, all relations in all writeable entities must have DETACH cascade enabled.
 
-7. Transaction JSF phase listeners
+8. Transaction JSF phase listeners
 ----------------------------------
 
 The phase listener starts two transactions: one for postbacks, which lasts until after the invoke application phase,
@@ -123,7 +156,7 @@ To enable, add to faces-config.xml:
     <phase-listener>pl.softwaremill.cdiext.transaction.TransactionPhaseListener</phase-listener>
 </lifecycle>
 
-8. Fields equal validator
+9. Fields equal validator
 -------------------------
 
 A validator for checking that the content of two fields is equal.
@@ -143,7 +176,7 @@ To enable, add to faces-config.xml:
     <validator-class>pl.softwaremill.cdiext.validator.FieldsEqualValidator</validator-class>
 </validator>
 
-9. Faces messages
+10. Faces messages
 -----------------
 
 A component for enqueing faces messages, which will survive redirects. Use:
@@ -160,7 +193,7 @@ To enable, add to faces-config.xml:
     </system-event-listener>
 </application>
 
-10. Navigation
+11. Navigation
 --------------
 
 Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
@@ -182,7 +215,7 @@ public String someAction() {
 
 You must define a login page. This works in conjuction with restricting pages to logged in users only.
 
-11. Restricting pages to logged in users only
+12. Restricting pages to logged in users only
 ---------------------------------------------
 
 There must be a bean implementing the LoginBean interface; the bean controls if there's a logged in user.
