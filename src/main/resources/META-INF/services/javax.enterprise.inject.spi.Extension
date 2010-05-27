@@ -1,3 +1,4 @@
 pl.softwaremill.cdiext.security.SecurityExtension
 pl.softwaremill.cdiext.config.ConfigExtension
+pl.softwaremill.cdiext.objectservice.extension.ObjectServiceExtension
 
