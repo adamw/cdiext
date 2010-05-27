@@ -46,22 +46,21 @@ public class FacesMessages implements Serializable {
         }
     }
 
-    private static final FacesMessage.Severity DEFAULT_SEVERITY = FacesMessage.SEVERITY_INFO;
     private List<MessageData> messages = new ArrayList<MessageData>();
 
-    public void add(String key, Object... params) {
-        addToControl(null, key, params);
+    public void addInfoFromBundle(String key, Object... params) {
+        addInfoFromBundleToControl(null, key, params);
     }
 
-    public void add(String key, FacesMessage.Severity severity, Object... params) {
-        addToControl(null, key, severity, params);
+    public void addFromBundle(String key, FacesMessage.Severity severity, Object... params) {
+        addFromBundleToControl(null, key, severity, params);
     }
 
-    public void addToControl(String controlId, String key, Object... params) {
-        addToControl(controlId, key, DEFAULT_SEVERITY, params);
+    public void addInfoFromBundleToControl(String controlId, String key, Object... params) {
+        addFromBundleToControl(controlId, key, FacesMessage.SEVERITY_INFO, params);
     }
 
-    public void addToControl(String controlId, String key, FacesMessage.Severity severity, Object... params) {
+    public void addFromBundleToControl(String controlId, String key, FacesMessage.Severity severity, Object... params) {
         // TODO: remove el evaluator?
         key = elEvaluator.evaluate(key, String.class);
         key = formatMessage(key, params);
