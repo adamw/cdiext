@@ -198,8 +198,8 @@ To enable, add to faces-config.xml:
 
 Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
 
-private final Page page1 = new PageBuilder("/page1.xhtml").setRequiresLogin(true).b();
-private final Page login = new PageBuilder("/login.xhtml").b();
+private final Page page1 = new ViewIdPageBuilder("/page1.xhtml").setRequiresLogin(true).b();
+private final Page login = new ViewIdPageBuilder("/login.xhtml").b();
 ...
 
 And define a getter for each page.

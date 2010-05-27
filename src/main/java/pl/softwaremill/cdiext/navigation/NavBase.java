@@ -22,29 +22,29 @@ public abstract class NavBase {
         return p;
     }
 
-    protected class PageBuilder {
+    protected class ViewIdPageBuilder {
         private final String viewId;
 
         private boolean requiresLogin;
 
-        public PageBuilder(String viewId) {
+        public ViewIdPageBuilder(String viewId) {
             this.viewId = viewId;
             requiresLogin = false;
         }
 
-        public PageBuilder setRequiresLogin(boolean requiresLogin) {
+        public ViewIdPageBuilder setRequiresLogin(boolean requiresLogin) {
             this.requiresLogin = requiresLogin;
             return this;
         }
 
         public Page b() {
-            Page p = new Page(viewId, new LinkedHashMap<String, String>(), requiresLogin);
+            Page p = new ViewIdPage(viewId, new LinkedHashMap<String, String>(), requiresLogin);
             register(viewId, p);
             return p;
         }
     }
     
-    private final Page currentPage = new PageBuilder("").b();
+    private final Page currentPage = new CurrentPage();
 
     public Page getCurrentPage() {
         return currentPage;
