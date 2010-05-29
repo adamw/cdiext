@@ -3,6 +3,20 @@ CDI, Weld and JSF Extensions
 
 Build the .jar and bundle it with your app.
 
+Maven repository:
+
+<repository>
+    <id>softwaremill-public</id>
+    <name>SoftwareMill Public</name>
+    <url>http://repository.softwaremill.pl/public</url>
+</repository>
+
+<dependency>
+    <groupId>pl.softwaremill</groupId>
+    <artifactId>cdiext</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+
 1. Stackable security interceptors
 ----------------------------------
 
