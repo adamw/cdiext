@@ -55,6 +55,11 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>repository.jboss.com</id>
+            <name>Legacy JBoss Maven2 repository</name>
+            <url>http://repository.jboss.com/maven2</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
