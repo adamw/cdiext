@@ -2,17 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>pl.softwaremill</groupId>
-    <artifactId>cdiext</artifactId>
-    <packaging>jar</packaging>
-    <name>CDI and Weld extensions</name>
+    <groupId>pl.softwaremill.cdiext</groupId>
+    <artifactId>cdiext-main</artifactId>
+    <packaging>pom</packaging>
+    <name>CDI, Faces and Weld extensions parent</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <arquillian.version>1.0.0.Alpha1</arquillian.version>
         <hibernate.version>3.5.1-Final</hibernate.version>
+        <cdiext.version>1.0.0-SNAPSHOT</cdiext.version>
     </properties>
+
+    <modules>
+        <module>common</module>
+        <module>cdi</module>
+        <module>faces</module>
+    </modules>
 
     <repositories>
         <repository>
@@ -74,73 +81,108 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- JSF -->
+            <dependency>
+                <groupId>javax.faces</groupId>
+                <artifactId>jsf-api</artifactId>
+                <!-- TODO: remove after weld-api-bom specifies the version correctly -->
+                <version>2.0.2-FCS</version>
+            </dependency>
+
+            <!-- TODO: update to 6.0 (https://jira.jboss.org/jira/browse/JBEE-15) -->
+            <!-- JEE -->
+            <dependency>
+                <groupId>org.jboss.javaee</groupId>
+                <artifactId>jboss-javaee</artifactId>
+                <version>5.2.0.Beta1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.javaee</groupId>
+                <artifactId>jboss-servlet-api</artifactId>
+                <version>2.5.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>el-api</artifactId>
+                <version>2.2</version>
+            </dependency>
+
+            <!-- Hibernate -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-annotations</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <!-- TODO: update to 6.0 (https://jira.jboss.org/jira/browse/JBEE-15) -->
+            <!-- JEE -->
+            <dependency>
+                <groupId>org.jboss.javaee</groupId>
+                <artifactId>jboss-javaee</artifactId>
+                <version>5.2.0.Beta1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.javaee</groupId>
+                <artifactId>jboss-servlet-api</artifactId>
+                <version>2.5.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>el-api</artifactId>
+                <version>2.2</version>
+            </dependency>
+
+            <!-- EL-impl: for creating EL contexts outside of faces requests -->
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>el-ri</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <!-- Arquillian -->
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-testng</artifactId>
+                <version>${arquillian.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.container</groupId>
+                <artifactId>arquillian-weld-embedded</artifactId>
+                <version>${arquillian.version}</version>
+            </dependency>
+
+            <!-- Inter-module dependencies -->
+            <dependency>
+                <groupId>pl.softwaremill.cdiext</groupId>
+                <artifactId>cdiext-common</artifactId>
+                <version>${cdiext.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.softwaremill.cdiext</groupId>
+                <artifactId>cdiext-cdi</artifactId>
+                <version>${cdiext.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- CDI (JSR-299) -->
+        <!-- FindBugs -->
+        <!-- TODO: enable -->
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- JSF -->
-        <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <!-- TODO: remove after weld-api-bom specifies the version correctly -->
-            <version>2.0.2-FCS</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- TODO: update to 6.0 (https://jira.jboss.org/jira/browse/JBEE-15) -->
-        <!-- JEE -->
-        <dependency>
-            <groupId>org.jboss.javaee</groupId>
-            <artifactId>jboss-javaee</artifactId>
-            <version>5.2.0.Beta1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.javaee</groupId>
-            <artifactId>jboss-servlet-api</artifactId>
-            <version>2.5.0.GA</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <version>2.2</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- EL-impl: for creating EL contexts outside of faces requests -->
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-ri</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>${hibernate.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-            <scope>provided</scope>
+            <groupId>net.sourceforge.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>1.3.2</version>
         </dependency>
 
         <!-- Logging -->
@@ -157,42 +199,8 @@
             <scope>test</scope>
             <classifier>jdk15</classifier>
         </dependency>
-
-        <!-- FindBugs -->
-        <!-- TODO: enable -->
-        <dependency>
-            <groupId>net.sourceforge.findbugs</groupId>
-            <artifactId>annotations</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        
-        <!-- Weld extensions -->
-        <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-extensions</artifactId>
-        </dependency>
-
-        <!-- Debug -->
-        <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Arquillian -->
-        <dependency>
-            <groupId>org.jboss.arquillian</groupId>
-            <artifactId>arquillian-testng</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-weld-embedded</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
+    
     <build>
         <finalName>${artifactId}</finalName>
         <plugins>
@@ -223,7 +231,7 @@
             <url>scp://repository.softwaremill.pl:/var/www/repository/public</url>
         </repository>
     </distributionManagement>
-    
+
     <reporting>
         <plugins>
             <plugin>

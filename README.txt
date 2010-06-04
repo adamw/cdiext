@@ -12,8 +12,18 @@ Maven repository:
 </repository>
 
 <dependency>
-    <groupId>pl.softwaremill</groupId>
-    <artifactId>cdiext</artifactId>
+    <groupId>pl.softwaremill.cdiext</groupId>
+    <artifactId>cdiext-common</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>pl.softwaremill.cdiext</groupId>
+    <artifactId>cdiext-cdi</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>pl.softwaremill.cdiext</groupId>
+    <artifactId>cdiext-faces</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
 
