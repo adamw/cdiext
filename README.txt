@@ -251,3 +251,15 @@ To enable, add to faces-config.xml:
 <lifecycle>
     <phase-listener>pl.softwaremill.util.SecurityPhaseListener</phase-listener>
 </lifecycle>
+
+13. Transaction interceptor
+---------------------------
+
+Use the @Transactional annotation to surround a method call with a transaction. Useful if the call is not in the
+scope of a JSF request, and the TX isn't managed by the container (e.g. remoting call).
+
+To enable, add to beans.xml:
+
+<interceptors>
+    <class>pl.softwaremill.cdiext.transaction.TransactionalInterceptor</class>
+</interceptors>

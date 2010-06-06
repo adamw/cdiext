@@ -29,4 +29,20 @@ public class EntityWriter {
         // in the beginning
         return (T) readOnlyEm.find(writtenEntity.getClass(), writtenEntity.getId());
     }
+
+    /**
+     * Executes an update query, created with the given creator, using the writeable entity manager.
+     * The read only entity manager is cleared, so all entities with lazy values will have to be re-read.
+     * @param queryCreator A creator to create the update query.
+     * @return The number of affected rows.
+     */
+    public int executeUpdate(QueryCreator queryCreator) {
+        int result = queryCreator.createQuery(writeableEm).executeUpdate();
+
+        // Now we need to clear the read only entity manager, so that it doesn't contain stale entities.
+        // This could result in some lazy initialization exception.
+        readOnlyEm.clear();
+
+        return result;
+    }
 }
