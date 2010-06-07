@@ -167,6 +167,13 @@
                 <version>${arquillian.version}</version>
             </dependency>
 
+            <!-- Testing -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.2.125</version>
+            </dependency>
+
             <!-- Inter-module dependencies -->
             <dependency>
                 <groupId>pl.softwaremill.cdiext</groupId>

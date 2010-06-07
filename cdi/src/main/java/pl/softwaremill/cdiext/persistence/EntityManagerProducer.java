@@ -29,10 +29,7 @@ public class EntityManagerProducer {
     @Produces @RequestScoped @ReadOnly
     public EntityManager getReadOnlyEntityManager() {
         EntityManager readOnlyEntityManager = entityManagerFactory.createEntityManager();
-
-        Session readOnlySession = (Session) readOnlyEntityManager.getDelegate();
-        readOnlySession.setDefaultReadOnly(true);
-        readOnlySession.setFlushMode(FlushMode.MANUAL);
+        EntityManagerUtil.makeEntityManagerReadOnly(readOnlyEntityManager);
 
         return new EntityManagerTxEnlistDecorator(readOnlyEntityManager);
     }

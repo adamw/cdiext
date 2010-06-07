@@ -21,7 +21,15 @@ public class EntityWriter {
      */
     public <T extends Identifiable<?>> T write(T entity) {
         // First detaching the entity from the RO context
-        readOnlyEm.detach(entity);
+        if (readOnlyEm.contains(entity)) {
+            readOnlyEm.detach(entity);
+        } else if (entity.getId() != null) {
+            // If the entity is not in the RO EM, and is persistent, it is possible that the RO EM contains a different
+            // copy of the entity. It must also be detached, hence first looking it up. It is possible that the find()
+            // loads the entity into the EM, but it's not possible to check if an entity is loaded into an EM simply
+            // by id.
+            readOnlyEm.detach(readOnlyEm.find(entity.getClass(), entity.getId()));
+        }
         // Writing the changes
         T writtenEntity = writeableEm.merge(entity);
         writeableEm.flush();
