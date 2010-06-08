@@ -11,6 +11,8 @@ import pl.softwaremill.cdiext.util.ArquillianUtil;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import static org.testng.Assert.assertNull;
+
 /**
  * @author Adam Warski (adam at warski dot org)
  */
@@ -122,4 +124,46 @@ public class EntityWriterTest extends AbstractHibernateTest {
         readOnlyEm2.close();
         writeableEm2.close();
     }
+
+    @Test
+    public void testPersistDelete() {
+        // Creating and setting the entity managers
+        EntityManager readOnlyEm = newReadOnlyEntityManager();
+        EntityManager writeableEm = newEntityManager();
+
+        readOnlyEntityManagerDelegator.setDelegate(readOnlyEm);
+        writeableEntityManagerDelegator.setDelegate(writeableEm);
+
+        // Writing an entity
+        writeableEm.getTransaction().begin();
+        readOnlyEm.joinTransaction();
+
+        SimpleEntity se = new SimpleEntity("C");
+        se = entityWriter.write(se);
+
+        Assert.assertEquals(se.getData(), "C");
+        Assert.assertNotNull(se.getId());
+
+        // Trying to read the entity
+        Assert.assertEquals(readOnlyEm.find(SimpleEntity.class, se.getId()), se);
+
+        writeableEm.getTransaction().commit();
+
+        // Writing an entity
+        writeableEm.getTransaction().begin();
+        readOnlyEm.joinTransaction();
+        
+        // now delete the entity
+        entityWriter.delete(se);
+
+        writeableEm.getTransaction().commit();
+
+        // check it's not accessible by the read only manager
+        assertNull(readOnlyEm.find(SimpleEntity.class, se.getId()));
+
+        // Closing
+        readOnlyEm.close();
+        writeableEm.close();
+    }
+
 }

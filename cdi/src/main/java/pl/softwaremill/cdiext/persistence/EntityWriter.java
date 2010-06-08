@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 
 /**
  * @author Adam Warski (adam at warski dot org)
+ * @author Tomasz Szymanski (szimano at szimano dot org)
  */
 public class EntityWriter {
     @Inject @ReadOnly
@@ -52,5 +53,30 @@ public class EntityWriter {
         readOnlyEm.clear();
 
         return result;
+    }
+
+    /**
+     * Deletes an entity and detaches it from the read only manager.
+     * @param entity Entity to delete
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T extends Identifiable<?>> void delete(T entity) {
+        // First detaching the entity from the RO context
+        if (readOnlyEm.contains(entity)) {
+            readOnlyEm.detach(entity);
+        } else if (entity.getId() != null) {
+            // If the entity is not in the RO EM, and is persistent, it is possible that the RO EM contains a different
+            // copy of the entity. It must also be detached, hence first looking it up. It is possible that the find()
+            // loads the entity into the EM, but it's not possible to check if an entity is loaded into an EM simply
+            // by id.
+            readOnlyEm.detach(readOnlyEm.find(entity.getClass(), entity.getId()));
+        }
+
+        // attach the entity
+        entity = (T) writeableEm.find(entity.getClass(), entity.getId());
+
+        // Then delete the entity
+        writeableEm.remove(entity);
+        writeableEm.flush();
     }
 }
