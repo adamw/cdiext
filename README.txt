@@ -263,3 +263,16 @@ To enable, add to beans.xml:
 <interceptors>
     <class>pl.softwaremill.cdiext.transaction.TransactionalInterceptor</class>
 </interceptors>
+
+13. Redirecting to an error page in case of a missing required view parameter
+-----------------------------------------------------------------------------
+
+If there's a required view parameter, which is missing, JSF only gives the possibility to add a faces message. With the
+listener, the user will be redirected to an error page, if that's the case, and the message will also be enqueued.
+The error page is specified by the navigation component (see 11).
+
+To enable, add to faces-config.xml:
+
+<lifecycle>
+    <phase-listener>pl.softwaremill.cdiext.navigation.RequiredViewParameterPhaseListener</phase-listener>
+</lifecycle>

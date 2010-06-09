@@ -48,6 +48,15 @@ public class FacesMessages implements Serializable {
 
     private List<MessageData> messages = new ArrayList<MessageData>();
 
+    public void addEL(String elExpression, FacesMessage.Severity severity) {
+        addELToControl(null, elExpression, severity);
+    }
+
+    public void addELToControl(String controlId, String elExpression, FacesMessage.Severity severity) {
+        String message = elEvaluator.evaluate(elExpression, String.class);
+        messages.add(new MessageData(controlId, new FacesMessage(severity, message, message)));
+    }
+
     public void addInfoFromBundle(String key, Object... params) {
         addInfoFromBundleToControl(null, key, params);
     }
@@ -61,8 +70,6 @@ public class FacesMessages implements Serializable {
     }
 
     public void addFromBundleToControl(String controlId, String key, FacesMessage.Severity severity, Object... params) {
-        // TODO: remove el evaluator?
-        key = elEvaluator.evaluate(key, String.class);
         key = formatMessage(key, params);
         FacesMessage fm = new FacesMessage(severity, key, key);
         messages.add(new MessageData(controlId, fm));

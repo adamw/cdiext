@@ -51,4 +51,6 @@ public abstract class NavBase {
     }
 
     public abstract Page getLogin();
+
+    public abstract Page getError();
 }
