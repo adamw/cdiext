@@ -21,7 +21,11 @@ import java.io.IOException;
 public class RequiredViewParameterPhaseListener implements PhaseListener {
     public void beforePhase(PhaseEvent event) {
         // Getting the current view id
-        FacesContext ctx = event.getFacesContext();
+        FacesContext ctx = event.getFacesContext();   
+        if (ctx.isPostback()) {
+            return;
+        }
+
         String viewId = ctx.getViewRoot().getViewId();
 
         // Getting the metadata facet
@@ -36,12 +40,10 @@ public class RequiredViewParameterPhaseListener implements PhaseListener {
                 if (child instanceof UIViewParameter) {
                     UIViewParameter viewParameter = (UIViewParameter) child;
                     // Checking if the parameter is required but has an empty value
-                    if (viewParameter.isRequired() && viewParameter.getStringValue(ctx) == null) {
-                        // Adding the message, if there's one
-                        if (viewParameter.getRequiredMessage() != null) {
-                            FacesMessages messages = BeanInject.lookup(FacesMessages.class);
-                            messages.addEL(viewParameter.getRequiredMessage(), FacesMessage.SEVERITY_ERROR);
-                        }
+                    if (viewParameter.getRequiredMessage() != null && isEmpty(viewParameter.getStringValue(ctx))) {
+                        // Adding the message
+                        FacesMessages messages = BeanInject.lookup(FacesMessages.class);
+                        messages.addEL(viewParameter.getRequiredMessage(), FacesMessage.SEVERITY_ERROR);
 
                         // Redirecting to the error page
                         NavBase nav = BeanInject.lookup(NavBase.class);
@@ -63,6 +65,10 @@ public class RequiredViewParameterPhaseListener implements PhaseListener {
     }
 
     public void afterPhase(PhaseEvent event) { }
+
+    private boolean isEmpty(String s) {
+        return s == null || "".equals(s.trim());
+    }
 
     @Override
     public PhaseId getPhaseId() {

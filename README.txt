@@ -271,6 +271,9 @@ If there's a required view parameter, which is missing, JSF only gives the possi
 listener, the user will be redirected to an error page, if that's the case, and the message will also be enqueued.
 The error page is specified by the navigation component (see 11).
 
+Important! To mark a view parameter as required, specify the requiredMessage attribute. Leave out the required
+attribute, as it interferes with <f:ajax> (don't ask me why ... ;) ).
+
 To enable, add to faces-config.xml:
 
 <lifecycle>
