@@ -15,14 +15,12 @@ import javax.persistence.PersistenceUnit;
  * @author Adam Warski (adam at warski dot org)
  */
 public class EntityManagerProducer {
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
 
     @Produces @RequestScoped @Writeable
     public EntityManager getEntityManager() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         return new EntityManagerTxEnlistDecorator(entityManager);
     }
 
@@ -36,5 +34,9 @@ public class EntityManagerProducer {
 
     public void disposeOfReadOnlyEntityManager(@Disposes @ReadOnly EntityManager readOnlyEntityManager) {
         readOnlyEntityManager.close();
+    }
+
+    public void disposeOfWriteableEntityManager(@Disposes @Writeable EntityManager writeableEntityManager) {
+        writeableEntityManager.close();
     }
 }
