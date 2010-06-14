@@ -26,4 +26,16 @@ public class ObjectUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static void get(Object on, String propertyName) {
+        try {
+            Field f = on.getClass().getDeclaredField(propertyName);
+            f.setAccessible(true);
+            f.get(on);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
