@@ -27,11 +27,11 @@ public class ObjectUtil {
         }
     }
 
-    public static void get(Object on, String propertyName) {
+    public static Object get(Object on, String propertyName) {
         try {
             Field f = on.getClass().getDeclaredField(propertyName);
             f.setAccessible(true);
-            f.get(on);
+            return f.get(on);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
