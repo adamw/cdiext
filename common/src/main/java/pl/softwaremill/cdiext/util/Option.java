@@ -56,4 +56,8 @@ public class Option<T> {
     public String getErrorMessage() {
         return errorMessage;
     }
+
+    public Object[] getErrorParams() {
+        return errorParams;
+    }
 }
