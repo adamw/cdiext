@@ -12,21 +12,43 @@ import java.util.Set;
 public class BeanInject {
     @SuppressWarnings({"unchecked"})
     public static <T> T lookup(Class<T> beanClass) {
-        try {
-            BeanManager manager = (BeanManager) new InitialContext().lookup("java:app/BeanManager");
+        BeanManager manager = getBeanManager();
 
-            Set<?> beans = manager.getBeans(beanClass);
-            if (beans.size() != 1) {
-                if (beans.size() == 0) {
-                    throw new RuntimeException("No beans of class " + beanClass + " found.");
-                } else {
-                    throw new RuntimeException("Multiple beans of class " + beanClass + " found: " + beans + ".");
-                }
+        Set<?> beans = manager.getBeans(beanClass);
+        if (beans.size() != 1) {
+            if (beans.size() == 0) {
+                throw new RuntimeException("No beans of class " + beanClass + " found.");
+            } else {
+                throw new RuntimeException("Multiple beans of class " + beanClass + " found: " + beans + ".");
             }
+        }
 
-            Bean<T> myBean = (Bean<T>) beans.iterator().next();
+        Bean<T> myBean = (Bean<T>) beans.iterator().next();
 
-            return (T) manager.getReference(myBean, beanClass, manager.createCreationalContext(myBean));
+        return (T) manager.getReference(myBean, beanClass, manager.createCreationalContext(myBean));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public static <T> T lookup(String name) {
+        BeanManager manager = getBeanManager();
+
+        Set<?> beans = manager.getBeans(name);
+        if (beans.size() != 1) {
+            if (beans.size() == 0) {
+                throw new RuntimeException("No beans with name " + name + " found.");
+            } else {
+                throw new RuntimeException("Multiple beans with name " + name + " found: " + beans + ".");
+            }
+        }
+
+        Bean<T> myBean = (Bean<T>) beans.iterator().next();
+
+        return (T) manager.getReference(myBean, myBean.getBeanClass(), manager.createCreationalContext(myBean));
+    }
+
+    private static BeanManager getBeanManager() {
+        try {
+            return (BeanManager) new InitialContext().lookup("java:app/BeanManager");
         } catch (NamingException e) {
             throw new RuntimeException(e);
         }
