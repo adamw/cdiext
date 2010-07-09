@@ -264,7 +264,7 @@ To enable, add to beans.xml:
     <class>pl.softwaremill.cdiext.transaction.TransactionalInterceptor</class>
 </interceptors>
 
-13. Redirecting to an error page in case of a missing required view parameter
+14. Redirecting to an error page in case of a missing required view parameter
 -----------------------------------------------------------------------------
 
 If there's a required view parameter, which is missing, JSF only gives the possibility to add a faces message. With the
