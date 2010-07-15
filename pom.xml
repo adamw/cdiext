@@ -240,7 +240,7 @@
         <repository>
             <id>softwaremill-public</id>
             <name>SoftwareMill Public</name>
-            <url>scpexe://repository.softwaremill.pl:/var/www/repository/public</url>
+            <url>scpexe://ubuntu@repository.softwaremill.pl:/var/www/repository/public</url>
         </repository>
     </distributionManagement>
 
