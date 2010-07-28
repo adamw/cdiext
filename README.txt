@@ -6,9 +6,9 @@ Build the .jar and bundle it with your app.
 Maven repository:
 
 <repository>
-    <id>softwaremill-public</id>
-    <name>SoftwareMill Public</name>
-    <url>http://repository.softwaremill.pl/public</url>
+    <id>softwaremill-snapshots</id>
+    <name>SoftwareMill Snapshots</name>
+    <url>http://tools.softwaremill.pl/nexus/content/repositories/snapshots</url>
 </repository>
 
 <dependency>
