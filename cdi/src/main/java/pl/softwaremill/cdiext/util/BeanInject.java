@@ -48,9 +48,14 @@ public class BeanInject {
 
     private static BeanManager getBeanManager() {
         try {
-            return (BeanManager) new InitialContext().lookup("java:app/BeanManager");
+            return (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
         } catch (NamingException e) {
-            throw new RuntimeException(e);
+            try {
+                return (BeanManager) new InitialContext().lookup("java:app/BeanManager");
+            } catch (NamingException e1) {
+                throw new RuntimeException(e1);
+            }
+
         }
     }
 }
