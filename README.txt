@@ -264,7 +264,19 @@ To enable, add to beans.xml:
     <class>pl.softwaremill.cdiext.transaction.TransactionalInterceptor</class>
 </interceptors>
 
-14. Redirecting to an error page in case of a missing required view parameter
+14. TransactionTimeout interceptor
+----------------------------------
+
+Use the @TransactionTimeout(timeout = SECONDS) on a method or type to prolong a transaction
+ timeout that is used on an annotated method.
+
+To enable, add to beans.xml:
+
+<interceptors>
+    <class>pl.softwaremill.cdiext.transaction.TransactionTimeoutInterceptor</class>
+</interceptors>
+
+15. Redirecting to an error page in case of a missing required view parameter
 -----------------------------------------------------------------------------
 
 If there's a required view parameter, which is missing, JSF only gives the possibility to add a faces message. With the
