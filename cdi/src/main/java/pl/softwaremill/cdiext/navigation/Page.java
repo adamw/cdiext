@@ -23,4 +23,5 @@ public interface Page {
     String getS();
     
     boolean isRequiresLogin();
+    String getSecurityEL();
 }

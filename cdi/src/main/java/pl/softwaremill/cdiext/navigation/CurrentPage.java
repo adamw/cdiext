@@ -32,4 +32,9 @@ public class CurrentPage extends AbstractPage {
     public Page copy(Map<String, String> params, boolean requiresLogin) {
         return new CurrentPage(viewId, params);
     }
+
+    @Override
+    public String getSecurityEL() {
+        return null;
+    }
 }

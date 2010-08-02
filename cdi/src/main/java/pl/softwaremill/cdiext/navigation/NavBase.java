@@ -27,6 +27,8 @@ public abstract class NavBase {
 
         private boolean requiresLogin;
 
+        private String securityEL;
+
         public ViewIdPageBuilder(String viewId) {
             this.viewId = viewId;
             requiresLogin = false;
@@ -37,8 +39,13 @@ public abstract class NavBase {
             return this;
         }
 
+        public ViewIdPageBuilder setSecurityEL(String securityEL) {
+            this.securityEL = securityEL;
+            return this;
+        }
+
         public Page b() {
-            Page p = new ViewIdPage(viewId, new LinkedHashMap<String, String>(), requiresLogin);
+            Page p = new ViewIdPage(viewId, new LinkedHashMap<String, String>(), requiresLogin, securityEL);
             register(viewId, p);
             return p;
         }

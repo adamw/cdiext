@@ -223,6 +223,7 @@ To enable, add to faces-config.xml:
 Extend the NavBase to create a "nav" component and define any pages that you use the following way, using the PageBuilder:
 
 private final Page page1 = new ViewIdPageBuilder("/page1.xhtml").setRequiresLogin(true).b();
+private final Page page1 = new ViewIdPageBuilder("/admin.xhtml").setRequiresLogin(true).setSecurityEL("#{currentUser.isAdmin)").b();
 private final Page login = new ViewIdPageBuilder("/login.xhtml").b();
 ...
 
@@ -238,6 +239,9 @@ public String someAction() {
 }
 
 You must define a login page. This works in conjuction with restricting pages to logged in users only.
+
+If you want to add extra security on the page, set the security EL using the page builder. It has to resolve to Boolean.class.
+If the expression returns false user will get 403 Forbidden.
 
 12. Restricting pages to logged in users only
 ---------------------------------------------
@@ -266,7 +270,7 @@ To enable, add to beans.xml:
 
 14. TransactionTimeout interceptor
 ----------------------------------
-
+             
 Use the @TransactionTimeout(timeout = SECONDS) on a method or type to prolong a transaction
  timeout that is used on an annotated method.
 
