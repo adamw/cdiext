@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Adam Warski (adam at warski dot org)
  */
 public abstract class NavBase {
-    private Map<String, Page> pagesByViewId= new HashMap<String, Page>();
+    private Map<String, Page> pagesByViewId = new HashMap<String, Page>();
 
     public void register(String viewId, Page page) {
         pagesByViewId.put(viewId, page);
@@ -50,7 +50,7 @@ public abstract class NavBase {
             return p;
         }
     }
-    
+
     private final Page currentPage = new CurrentPage();
 
     public Page getCurrentPage() {
@@ -60,4 +60,15 @@ public abstract class NavBase {
     public abstract Page getLogin();
 
     public abstract Page getError();
+
+    /**
+     * If this returns true, the user will be redirected to a login page once trying to access restricted page.
+     * <p/>
+     * Default is true.
+     *
+     * @return Treu or false - default is true
+     */
+    public boolean shouldRedirectToLogin() {
+        return true;
+    }
 }

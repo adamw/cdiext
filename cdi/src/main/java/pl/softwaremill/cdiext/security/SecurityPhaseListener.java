@@ -43,42 +43,56 @@ public class SecurityPhaseListener implements PhaseListener {
 
         Page page = nav.lookup(event.getFacesContext().getViewRoot().getViewId());
 
-        // check redirect only if we're not on the login page
-        if (!page.equals(nav.getLogin()) &&
-                // and redirect exists
-                session.getAttribute(PREVIOUS_VIEW) != null) {
-            
-            String redirect = (String) session.getAttribute(PREVIOUS_VIEW);
+        // if needed - handle redirects
+        if (nav.shouldRedirectToLogin()) {
+            // check redirect only if we're not on the login page
+            if (!page.equals(nav.getLogin()) &&
+                    // and redirect exists
+                    session.getAttribute(PREVIOUS_VIEW) != null) {
 
-            // set null so it doesn't re-redirect
-            session.setAttribute(PREVIOUS_VIEW, null);
+                String redirect = (String) session.getAttribute(PREVIOUS_VIEW);
 
-            // finally perform the redirect
-            try {
-                ctx.getExternalContext().redirect(ctx.getExternalContext().encodeActionURL(redirect));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                // set null so it doesn't re-redirect
+                session.setAttribute(PREVIOUS_VIEW, null);
+
+                // finally perform the redirect
+                try {
+                    ctx.getExternalContext().redirect(ctx.getExternalContext().encodeActionURL(redirect));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                ctx.responseComplete();
+                return;
             }
 
-            ctx.responseComplete();
-            return;
-        }
+            if (page.isRequiresLogin() && !login.isLoggedIn()) {
+                String url = ctx.getApplication().getViewHandler().getActionURL(ctx, nav.getLogin().s());
 
-        if (page.isRequiresLogin() && !login.isLoggedIn()) {
-            String url = ctx.getApplication().getViewHandler().getActionURL(ctx, nav.getLogin().s());
+                // remember this view to redirect back to it
+                session.setAttribute(PREVIOUS_VIEW, ctx.getApplication().getViewHandler().getActionURL(ctx, page.s()));
 
-            // remember this view to redirect back to it
-            session.setAttribute(PREVIOUS_VIEW, ctx.getApplication().getViewHandler().getActionURL(ctx, page.s()));
+                try {
 
-            try {
-                ctx.getExternalContext().redirect(ctx.getExternalContext().encodeActionURL(url));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                    ctx.getExternalContext().redirect(ctx.getExternalContext().encodeActionURL(url));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                ctx.responseComplete();
+
+                return;
             }
-            ctx.responseComplete();
-
-            return;
         }
+        else {
+            // otherwise check isLoggerIn()
+            if (page.isRequiresLogin() && !login.isLoggedIn()) {
+                // show 403 Forbidden - user not logged in and do not know what to do with it
+                ctx.getExternalContext().setResponseStatus(403);
+
+                ctx.responseComplete();
+            }
+        }
+
 
         // otherwise check the security el
 
