@@ -37,6 +37,17 @@ public class ObjectServiceExtension implements Extension {
     private BeanManager beanManager;
 
     private Set<ObjectServiceSpecification> objectServicesSpecs = new HashSet<ObjectServiceSpecification>();
+    private Set<ObjectServiceSpecification> objectServicesProviderSpecs = new HashSet<ObjectServiceSpecification>();
+
+    private Type getObjectServiceTypeParameter(Iterable<Type> flattenedTypes) {
+        for (Type flattenedType : flattenedTypes) {
+            if (flattenedType instanceof ParameterizedType && ((ParameterizedType) flattenedType).getRawType().equals(OS.class)) {
+                return ((ParameterizedType) flattenedType).getActualTypeArguments()[0];
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Looks for the type parameter of the given annotated type, which has a raw type {@link pl.softwaremill.cdiext.objectservice.OS}.
@@ -44,13 +55,12 @@ public class ObjectServiceExtension implements Extension {
      * @return The type parameter or {@code null}, if no type parameter is specified.
      */
     private Type getObjectServiceTypeParameter(WeldClassImpl<?> at) {
-        for (Type flattenedType : at.getInterfaceClosure()) {
-            if (flattenedType instanceof ParameterizedType && ((ParameterizedType) flattenedType).getRawType().equals(OS.class)) {
-                return ((ParameterizedType) flattenedType).getActualTypeArguments()[0];
-            }
+        Type typeParameter = getObjectServiceTypeParameter(at.getInterfaceClosure());
+        if (typeParameter != null)  {
+            return typeParameter;
+        } else {
+            return getObjectServiceTypeParameter(at.getTypeClosure());
         }
-
-        return null;
     }
 
     private Type[] createWildcards(int count) {
@@ -62,7 +72,7 @@ public class ObjectServiceExtension implements Extension {
         return ret;
     }
 
-    public <X> void processAnnotatedType(@Observes ProcessAnnotatedType<X> event) {
+    public <X> void processAnnotatedType(@Observes ProcessAnnotatedType<X> event) {        
         AnnotatedType<X> at = event.getAnnotatedType();
 
         // Checking if the class implements the OS interface
@@ -70,7 +80,7 @@ public class ObjectServiceExtension implements Extension {
             // Getting the type parameter type parameter for the OS implementation
             Type osTypeParameter = getObjectServiceTypeParameter((WeldClassImpl) at);
 
-            // If the type parameter is a type variable, searching for hat type variable in the main class declaration.
+            // If the type parameter is a type variable, searching for that type variable in the main class declaration.
             if (osTypeParameter instanceof TypeVariable) {
                 String typeVariableName = ((TypeVariable) osTypeParameter).getName();
                 for (TypeVariable<Class<X>> classTypeVariable : at.getJavaClass().getTypeParameters()) {
@@ -85,8 +95,15 @@ public class ObjectServiceExtension implements Extension {
 
             // Checking if the found type variable is a class. If so, registering a new object service.
             if (osTypeParameter instanceof Class) {
-                // TODO: the service type should always be the class directly implementing OS!
                 Class<?> serviceClass = at.getJavaClass();
+
+                // Checking if the class directly implements OS.
+                boolean osFound = false;
+                for (Class<?> serviceClassInterface : serviceClass.getInterfaces()) {
+                    if (serviceClassInterface.isAssignableFrom(OS.class)) {
+                        osFound = true;
+                    }
+                }
 
                 // If the class has any type parameters, filling them in with wildcards
                 Type serviceType;
@@ -96,15 +113,22 @@ public class ObjectServiceExtension implements Extension {
                     serviceType = serviceClass;
                 }
 
-                // Registering a new OSP for class: osTypeParameter and service: serviceType
-                objectServicesSpecs.add(new ObjectServiceSpecification((Class<?>) osTypeParameter, serviceType, serviceClass));
+                ObjectServiceSpecification osSpec = new ObjectServiceSpecification((Class<?>) osTypeParameter, serviceType, serviceClass);
+
+                // Registering a new spec so that the bean can be found by the provider
+                objectServicesSpecs.add(osSpec);
+
+                if (osFound) {
+                    // Registering a new OSP for class: osTypeParameter and service: serviceType
+                    objectServicesProviderSpecs.add(osSpec);
+                }
             }
         }
     }
 
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
         // Adding OSP beans according to the specifications gathered
-        for (ObjectServiceSpecification objectServicesSpec : objectServicesSpecs) {
+        for (ObjectServiceSpecification objectServicesSpec : objectServicesProviderSpecs) {
             abd.addBean(new ObjectServiceProviderBean(this, objectServicesSpec));
         }
 

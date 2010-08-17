@@ -34,6 +34,9 @@ public class BasicObjectServiceTest extends Arquillian {
     @Inject
     private OSP<A, Service2<A>> service2;
 
+    @Inject
+    private OSP<A, Service3<A>> service3;
+
     @Test
     public void testService1WithB() {
         Assert.assertEquals(service1.f(new B(10)).get(), 10);
@@ -72,5 +75,15 @@ public class BasicObjectServiceTest extends Arquillian {
         Assert.assertEquals(service2.f(new C("y")).get(), "y");
         int instancesEnd = Service2C.instanceCount();
         Assert.assertEquals(instancesEnd - instancesStart, 2);
+    }
+
+    @Test
+    public void testService3WithB() {
+        Assert.assertEquals(service3.f(new B(10)).get(), 10);
+    }
+
+    @Test
+    public void testService3WithC() {
+        Assert.assertEquals(service3.f(new C("x")).get(), "x");
     }
 }
