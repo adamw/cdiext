@@ -11,9 +11,7 @@ import java.util.Set;
  */
 public class BeanInject {
     @SuppressWarnings({"unchecked"})
-    public static <T> T lookup(Class<T> beanClass) {
-        BeanManager manager = getBeanManager();
-
+    public static <T> T lookup(BeanManager manager, Class<T> beanClass) {
         Set<?> beans = manager.getBeans(beanClass);
         if (beans.size() != 1) {
             if (beans.size() == 0) {
@@ -29,9 +27,12 @@ public class BeanInject {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static <T> T lookup(String name) {
-        BeanManager manager = getBeanManager();
+    public static <T> T lookup(Class<T> beanClass) {
+        return lookup(getBeanManager(), beanClass);
+    }
 
+    @SuppressWarnings({"unchecked"})
+    public static <T> T lookup(BeanManager manager, String name) {
         Set<?> beans = manager.getBeans(name);
         if (beans.size() != 1) {
             if (beans.size() == 0) {
@@ -44,6 +45,11 @@ public class BeanInject {
         Bean<T> myBean = (Bean<T>) beans.iterator().next();
 
         return (T) manager.getReference(myBean, myBean.getBeanClass(), manager.createCreationalContext(myBean));
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public static <T> T lookup(String name) {
+        return lookup(getBeanManager(), name);
     }
 
     private static BeanManager getBeanManager() {
