@@ -49,7 +49,7 @@ public class BeanInject {
 
     @SuppressWarnings({"unchecked"})
     public static <T> T lookup(String name) {
-        return lookup(getBeanManager(), name);
+        return BeanInject.<T>lookup(getBeanManager(), name);
     }
 
     private static BeanManager getBeanManager() {
