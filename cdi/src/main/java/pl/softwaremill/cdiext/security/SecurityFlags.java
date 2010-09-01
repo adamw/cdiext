@@ -1,8 +1,8 @@
 package pl.softwaremill.cdiext.security;
 
 import javax.enterprise.inject.Model;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
@@ -11,14 +11,14 @@ import java.util.concurrent.Callable;
  */
 @Model
 public class SecurityFlags {
-    private Map<String, Boolean> flags = new HashMap<String, Boolean>();
+    private Set<String> flags = new HashSet<String>();
 
     public boolean hasFlag(String name) {
-        return flags.containsKey(name) && flags.get(name);
+        return flags.contains(name);
     }
 
     public <T> T doWithFlag(String flagName, Callable<T> callable) {
-        Boolean oldValue = flags.put(flagName, true);
+        flags.add(flagName);
         try {
             return callable.call();
         } catch (RuntimeException e) {
@@ -26,7 +26,7 @@ public class SecurityFlags {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            flags.put(flagName, oldValue);
+            flags.remove(flagName);
         }
     }
 }
