@@ -1,5 +1,6 @@
 package pl.softwaremill.cdiext.messages;
 
+import org.slf4j.Logger;
 import pl.softwaremill.cdiext.el.ELEvaluator;
 import pl.softwaremill.cdiext.i18n.CurrentLocale;
 
@@ -13,6 +14,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -22,6 +24,10 @@ import java.util.ResourceBundle;
 @SessionScoped
 // TODO: make @FlashScoped after flash is fixed
 public class FacesMessages implements Serializable {
+
+    @Inject
+    private Logger logger;
+
     @Inject
     private ELEvaluator elEvaluator;
 
@@ -85,6 +91,15 @@ public class FacesMessages implements Serializable {
 
     public String formatMessage(String key, Object... params) {
         // TODO: multiple bundles?
+        try {
+            return tryFormatMessage(key, params);
+        } catch (MissingResourceException e) {
+            logger.warn("Missing resource key: " + key, e);
+            return "???" + key + "???";
+        }
+    }
+
+    private String tryFormatMessage(String key, Object[] params) {
         ResourceBundle rb = ResourceBundle.getBundle("messages", currentLocale.getCurrentLocale());
         String value = rb.getString(key);
         return new MessageFormat(value).format(params);
@@ -94,7 +109,7 @@ public class FacesMessages implements Serializable {
         if (id == null) {
             return null;
         }
-        
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
         return getClientId(facesContext.getViewRoot(), id, facesContext);
     }
@@ -113,4 +128,5 @@ public class FacesMessages implements Serializable {
             return null;
         }
     }
+
 }
