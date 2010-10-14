@@ -2,7 +2,7 @@ package pl.softwaremill.cdiext.objectservice;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.testng.Arquillian;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public class BasicObjectServiceTest extends Arquillian {
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive ar = Archives.create("test.jar", JavaArchive.class)
+        JavaArchive ar = ShrinkWrap.create(JavaArchive.class, "test.jar")
                 .addPackage(A.class.getPackage())
                 .addPackage(OS.class.getPackage())
                 .addPackage(ObjectServiceExtension.class.getPackage());

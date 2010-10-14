@@ -6,12 +6,12 @@
     <artifactId>cdiext-faces</artifactId>
     <packaging>jar</packaging>
     <name>Faces extensions</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>pl.softwaremill.cdiext</groupId>
         <artifactId>cdiext-main</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>

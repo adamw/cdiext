@@ -2,7 +2,7 @@ package pl.softwaremill.cdiext.security;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.testng.Arquillian;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.testng.annotations.Test;
 import pl.softwaremill.cdiext.el.ELEvaluator;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class SecureTest extends Arquillian {
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive ar = Archives.create("test.jar", JavaArchive.class)
+        JavaArchive ar = ShrinkWrap.create(JavaArchive.class, "test.jar")
                 .addPackage(SecureTest.class.getPackage())
                 .addPackage(Secure.class.getPackage())
                 .addPackage(ELEvaluator.class.getPackage());

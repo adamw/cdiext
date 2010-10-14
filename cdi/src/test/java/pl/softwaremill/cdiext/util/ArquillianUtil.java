@@ -2,9 +2,9 @@ package pl.softwaremill.cdiext.util;
 
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.container.ManifestContainer;
 import org.jboss.shrinkwrap.api.container.ResourceContainer;
-import org.jboss.shrinkwrap.impl.base.asset.ByteArrayAsset;
 
 /**
  * @author Adam Warski (adam at warski dot org)
@@ -13,15 +13,31 @@ public class ArquillianUtil {
     public static <T extends Archive<T> & ManifestContainer<T>> T addEmptyBeansXml(T archive) {
         return archive.addManifestResource(
                         new ByteArrayAsset("<beans/>".getBytes()),
-                        ArchivePaths.create("beans.xml"));
+                        ArchivePaths.create("META-INF/beans.xml"));
     }
 
     public static <T extends Archive<T> & ResourceContainer<T>> T addTestBeansXml(T archive) {
-        // TODO: use the same as in the app?
-        return archive.addResource("beans.xml");
+        StringBuilder beansXmlBuilder = new StringBuilder();
+        beansXmlBuilder.append("<beans>");
+        beansXmlBuilder.append("<interceptors>");
+        beansXmlBuilder.append("<class>pl.softwaremill.cdiext.security.SecurityInterceptor</class>");
+        beansXmlBuilder.append("<class>pl.softwaremill.cdiext.security.SecurityResultInterceptor</class>");
+        beansXmlBuilder.append("</interceptors>");
+        beansXmlBuilder.append("</beans>");
+
+        return archive.addResource(
+                new ByteArrayAsset(beansXmlBuilder.toString().getBytes()),
+                ArchivePaths.create("META-INF/beans.xml"));
     }
 
     public static <T extends Archive<T> & ResourceContainer<T>> T addExtensionsFromApp(T archive) {
-        return archive.addResource("META-INF/services/javax.enterprise.inject.spi.Extension");
+        StringBuilder extensionsBuilder = new StringBuilder();
+        extensionsBuilder.append("pl.softwaremill.cdiext.security.SecurityExtension");
+        extensionsBuilder.append("pl.softwaremill.cdiext.config.ConfigExtension");
+        extensionsBuilder.append("pl.softwaremill.cdiext.objectservice.extension.ObjectServiceExtension");
+
+        return archive.addResource(
+                new ByteArrayAsset(extensionsBuilder.toString().getBytes()),
+                ArchivePaths.create("META-INF/services/javax.enterprise.inject.spi.Extension"));
     }
 }

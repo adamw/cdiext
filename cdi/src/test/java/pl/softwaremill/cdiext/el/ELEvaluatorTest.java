@@ -2,7 +2,7 @@ package pl.softwaremill.cdiext.el;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.testng.Arquillian;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -21,7 +21,7 @@ public class ELEvaluatorTest extends Arquillian {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive ar = Archives.create("test.jar", JavaArchive.class)
+        JavaArchive ar = ShrinkWrap.create(JavaArchive.class, "test.jar")
                 .addClasses(StringHoldingBean.class)
                 .addPackage(ELEvaluator.class.getPackage());
 

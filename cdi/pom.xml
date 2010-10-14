@@ -6,12 +6,12 @@
     <artifactId>cdiext-cdi</artifactId>
     <packaging>jar</packaging>
     <name>CDI/Weld extensions</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>pl.softwaremill.cdiext</groupId>
         <artifactId>cdiext-main</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -59,7 +59,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Hibernate -->
+        <!-- JEE and Hibernate -->
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -75,11 +85,17 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- Weld extensions -->
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-extensions</artifactId>
+        </dependency> 
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <scope>provided</scope>
+            <version>3.0.0.Beta4</version>
         </dependency>
 
         <!-- Debug -->
@@ -97,7 +113,7 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-weld-embedded</artifactId>
+            <artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
             <scope>test</scope>
         </dependency>
 

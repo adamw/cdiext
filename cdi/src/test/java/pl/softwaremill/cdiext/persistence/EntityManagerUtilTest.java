@@ -2,7 +2,7 @@ package pl.softwaremill.cdiext.persistence;
 
 import org.hibernate.ejb.Ejb3Configuration;
 import org.jboss.arquillian.api.Deployment;
-import org.jboss.shrinkwrap.api.Archives;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -21,7 +21,7 @@ public class EntityManagerUtilTest extends AbstractHibernateTest {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive ar = Archives.create("test.jar", JavaArchive.class);
+        JavaArchive ar = ShrinkWrap.create(JavaArchive.class, "test.jar");
         ar = ArquillianUtil.addEmptyBeansXml(ar);
 
         return ar;

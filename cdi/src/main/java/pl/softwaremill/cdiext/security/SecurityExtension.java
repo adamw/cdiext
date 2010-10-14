@@ -1,6 +1,6 @@
 package pl.softwaremill.cdiext.security;
 
-import org.jboss.weld.extensions.util.annotated.NewAnnotatedTypeBuilder;
+import org.jboss.weld.extensions.reflection.annotated.AnnotatedTypeBuilder;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AnnotatedMethod;
@@ -27,7 +27,7 @@ public class SecurityExtension implements Extension {
     public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
         // A flag indicating if the builder was used to modify the annotations
         boolean used = false;
-        NewAnnotatedTypeBuilder<T> builder = new NewAnnotatedTypeBuilder<T>(event.getAnnotatedType());
+        AnnotatedTypeBuilder<T> builder = new AnnotatedTypeBuilder<T>().readFromType(event.getAnnotatedType());
 
         // We need to read the values of the @Secure annotation that are present on:
         // 1. types (classes)
