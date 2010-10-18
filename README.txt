@@ -1,6 +1,14 @@
 CDI, Weld and JSF Extensions
 ============================
 
+============================
+============================
+Moved: all new development will be done as part of the softwaremill-common project.
+See: http://github.com/softwaremill/softwaremill-common
+============================
+============================
+
+
 Build the .jar and bundle it with your app.
 
 Maven repository:
